@@ -17,6 +17,9 @@
         [class.bg-danger]="!notificationGrant">
         {{notificationGrant ? "Permitido" : "Bloqueado"}}
       </span>
+      <button *ngIf="!notificationGrant" class="button button-primary" (click)="subscribeToNotifications()">
+        Subscribe notifications
+      </button>
     </li>
     <li class="list-group-item">
       Worker service status:

@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { NewsletterService } from './services/newsletter.service';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       registrationStrategy: 'registerWhenStable:30000'
     })
   ],
-  providers: [],
+  providers: [NewsletterService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

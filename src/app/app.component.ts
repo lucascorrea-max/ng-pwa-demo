@@ -1,8 +1,8 @@
 import { Platform } from '@angular/cdk/platform';
 import { Component, OnInit } from '@angular/core';
-import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
+import { SwPush, SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter, map } from 'rxjs';
-import { NotificationService } from './services/notification.service';
+import { NewsletterService } from './services/newsletter.service';
 
 @Component({
   selector: 'app-root',
@@ -15,10 +15,12 @@ export class AppComponent implements OnInit {
   modalPwaEvent: any;
   modalPwaPlatform: string | undefined;
   notificationGrant: boolean = false;
+  readonly VAPID_PUBLIC_KEY = "BMLSJsPJDm_FNfEaFlIUlJCnt_XLvqd5WeSg-NYfHY998DMdBHEGBaLxhCUiSNck-_osSgNLv9nMcLB-b87DR-g";
 
   constructor(
-    private notificationService: NotificationService,
+    private newsletterService: NewsletterService,
     private platform: Platform,
+    private swPush: SwPush,
     private swUpdate: SwUpdate) {
 
   }
@@ -39,19 +41,16 @@ export class AppComponent implements OnInit {
       );
     }
 
-    this.notificationService.verificarPermissao()
-      .then((permissao: string) => {
-        if (permissao === 'granted') {
-          console.log('Permissão para exibir notificações concedida.');
-          this.notificationGrant = true;
-        } else if (permissao === 'denied') {
-          this.notificationGrant = false;
-        }
-      });
-
     this.loadModalPwa();
   }
 
+  public subscribeToNotifications() {
+    this.swPush.requestSubscription({
+      serverPublicKey: this.VAPID_PUBLIC_KEY
+    })
+      .then(sub => this.newsletterService.addPushSubscriber(sub).subscribe())
+      .catch(err => console.error("Could not subscribe to notifications", err));
+  }
 
   public updateVersion() {
     this.modalVersion = false;
