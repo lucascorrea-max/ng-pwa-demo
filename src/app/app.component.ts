@@ -2,6 +2,7 @@ import { Platform } from '@angular/cdk/platform';
 import { Component, OnInit } from '@angular/core';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter, map } from 'rxjs';
+import { NotificationService } from './services/notification.service';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +14,10 @@ export class AppComponent implements OnInit {
   modalVersion: boolean = false;
   modalPwaEvent: any;
   modalPwaPlatform: string | undefined;
+  notificationGrant: boolean = false;
 
   constructor(
+    private notificationService: NotificationService,
     private platform: Platform,
     private swUpdate: SwUpdate) {
 
@@ -36,8 +39,19 @@ export class AppComponent implements OnInit {
       );
     }
 
+    this.notificationService.verificarPermissao()
+      .then((permissao: string) => {
+        if (permissao === 'granted') {
+          console.log('Permissão para exibir notificações concedida.');
+          this.notificationGrant = true;
+        } else if (permissao === 'denied') {
+          this.notificationGrant = false;
+        }
+      });
+
     this.loadModalPwa();
   }
+
 
   public updateVersion() {
     this.modalVersion = false;

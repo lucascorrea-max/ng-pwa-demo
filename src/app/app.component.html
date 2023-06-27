@@ -1,19 +1,36 @@
-<div class="container-fluid py-3">
-  <h1>Angular Progressive Web Application (PWA)</h1>
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom border-gray shadow-sm"
+  style="padding: 8px 16px">
+  <a class="navbar-brand"
+    href="#">
+    <i class="bi bi-bootstrap"
+      style="margin-right: 6px;"></i>
+    <span class="pl-2">Angular PWA Demo</span>
+  </a>
+</nav>
 
-  <div class="row my-5">
-    <div class="col text-end">
-      Status:
-    </div>
-    <div class="col">
-      <span class="badge bg-success"
-        *ngIf="isOnline">Online</span>
-      <span class="badge bg-danger"
-        *ngIf="!isOnline">Offline</span>
-    </div>
-  </div>
+<div class="container mt-4">
+  <ul class="list-group">
+    <li class="list-group-item">
+      Permissão de notificação:
+      <span class="badge"
+        [class.bg-success]="notificationGrant"
+        [class.bg-danger]="!notificationGrant">
+        {{notificationGrant ? "Permitido" : "Bloqueado"}}
+      </span>
+    </li>
+    <li class="list-group-item">
+      Worker service status:
+      <span class="badge"
+        [class.bg-success]="isOnline"
+        [class.bg-danger]="!isOnline">
+        {{isOnline ? "Online" : "Offline"}}
+      </span>
+    </li>
+  </ul>
 </div>
+Notificações: {{notificationGrant}}
 
+<!-- Modals -->
 <div class="w-100 position-absolute top-0"
   *ngIf="modalVersion">
   <div class="alert alert-secondary m-2">
