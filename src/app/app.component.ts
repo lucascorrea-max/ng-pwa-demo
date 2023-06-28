@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SwPush, SwRegistrationOptions } from '@angular/service-worker';
+import { SwRegistrationOptions } from '@angular/service-worker';
+import { NotificationsService } from './services/notifications.service';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +13,9 @@ export class AppComponent implements OnInit {
   pushSubscribed: boolean = false;
 
   constructor(
-    private sw: SwRegistrationOptions,
-    private swPush: SwPush) {
+    private notificationsService: NotificationsService,
+    private sw: SwRegistrationOptions
+  ) {
     this.notificationGranted = window.Notification.permission === 'granted';
   }
 
@@ -21,14 +23,12 @@ export class AppComponent implements OnInit {
     this.isOnline = this.sw.enabled;
   }
 
-  public subscribeToNotifications() {
-    window.Notification.requestPermission().then(permission => {
-      this.notificationGranted = permission === 'granted';
+  public async subscribeToNotifications() {
+    (await this.notificationsService.subscribeToNotifications()).subscribe({
+      next: () => {
+        this.pushSubscribed = true;
+        this.notificationGranted = window.Notification.permission === 'granted';
+      }
     });
-    // this.swPush.requestSubscription({
-    //   serverPublicKey: this.VAPID_PUBLIC_KEY
-    // })
-    //   .then((sub: PushSubscription) => this)
-    //   .catch(err => console.error("Could not subscribe to notifications", err));
   }
 }
