@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
       console.log(subscription);
     });
     this.swPush.messages.subscribe((message) => {
-
+      console.log(message);
     });
   }
 
