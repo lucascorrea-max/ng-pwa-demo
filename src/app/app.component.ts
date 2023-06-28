@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SwRegistrationOptions } from '@angular/service-worker';
+import { SwPush, SwRegistrationOptions } from '@angular/service-worker';
 import { NotificationsService } from './services/notifications.service';
 
 @Component({
@@ -14,13 +14,20 @@ export class AppComponent implements OnInit {
 
   constructor(
     private notificationsService: NotificationsService,
-    private sw: SwRegistrationOptions
+    private sw: SwRegistrationOptions,
+    private swPush: SwPush
   ) {
     this.notificationGranted = window.Notification.permission === 'granted';
   }
 
   ngOnInit(): void {
     this.isOnline = this.sw.enabled;
+    this.swPush.subscription.subscribe((subscription) => {
+      console.log(subscription);
+    });
+    this.swPush.messages.subscribe((message) => {
+
+    });
   }
 
   public async subscribeToNotifications() {
