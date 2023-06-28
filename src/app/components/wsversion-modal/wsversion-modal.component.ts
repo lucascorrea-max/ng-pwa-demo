@@ -25,6 +25,8 @@ export class WsversionModalComponent implements OnInit {
         })
       );
     }
+
+    this.swUpdate.checkForUpdate().then(result => this.modalVersion = result);
   }
 
   public updateVersion() {
